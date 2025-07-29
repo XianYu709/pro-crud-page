@@ -1,12 +1,12 @@
 {
   "name": "pro-crud-page",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "build": "rollup -c rollup.config.js --bundleConfigAsCjs"
   },
   "exports": {
     ".": {
-      "import": "./dist/index.js",
+      "import": "./src/index.ts",
       "types": "./dist/index.d.ts"
     }
   },

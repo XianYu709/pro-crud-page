@@ -217,7 +217,7 @@ const Detail: React.FC<DetailProps> = forwardRef(
     const ViewModeMap: Record<string, React.FunctionComponent> = {
       modal: ModalMode,
       page: PageMode,
-      ...provide.ModeMap,
+      ...provide?.ModeMap,
     };
 
     const Comp: any = ViewModeMap[showMode];

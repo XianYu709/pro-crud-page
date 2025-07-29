@@ -265,7 +265,7 @@ export default function Page<T>(props: PageProps<T>) {
           ...props?.pageProps?.style,
           display: showFather ? "block" : "none",
         }}
-        {...provide.outBoxProps}
+        {...provide?.outBoxProps}
       >
         {props?.subTitle && (
           <div className={"ml-6 pt-2 text-[14px] text-gray-700 font-bold"}>
@@ -273,7 +273,7 @@ export default function Page<T>(props: PageProps<T>) {
           </div>
         )}
         <ProTable<any>
-          {...(provide.globalTableProps as any)}
+          {...(provide?.globalTableProps as any)}
           actionRef={tableRef}
           key={props.title ?? "ProTable"}
           dateFormatter="string"
@@ -291,7 +291,7 @@ export default function Page<T>(props: PageProps<T>) {
           key={props.title ?? "Detail"}
           onHideFather={handlerHideFather}
           onSuccess={flushData}
-          formProps={{ ...provide.globalFormProps, ...props?.formProps }}
+          formProps={{ ...provide?.globalFormProps, ...props?.formProps }}
         ></Detail>
       </div>
     </ProConfigProvider>
