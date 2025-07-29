@@ -83,7 +83,7 @@ const ModalMode: React.FC<DefaultProps> = ({
   return (
     <Modal
       open={true}
-      {...modeProps}
+      {...(modeProps as any)}
       footer={null}
       onCancel={handlerCancel}
       title={title}

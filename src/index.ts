@@ -12,7 +12,7 @@ import {
 import React from "react";
 
 type custRender = {
-  render: Pick<DefaultProps<any>, "content">;
+  render: Pick<DefaultProps, "content">;
   base: "modal" | "page" | "none";
 };
 
