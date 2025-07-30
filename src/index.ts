@@ -49,6 +49,7 @@ export interface PageProps<T> {
   pageProps?: PageContainerProps & {
     style?: React.CSSProperties;
   };
+  tableRef?: React.MutableRefObject<any> | Function;
   formProps?: FormProps; //全局
   tableProps?: ProTableProps<any, any>;
   toolBar?: apiButton<T>[];

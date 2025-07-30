@@ -15,6 +15,7 @@ import { PlusContext } from "../components/plus";
 export default function Page<T>(props: PageProps<T>) {
   const tableRef = useRef<any>();
   const provide = useContext(PlusContext);
+
   const flushData = async () => {
     tableRef.current.reloadAndRest();
     tableRef.current.reload();
@@ -22,7 +23,13 @@ export default function Page<T>(props: PageProps<T>) {
   };
 
   useEffect(() => {
-    // flushData(true);
+    if (props?.tableRef) {
+      if (typeof props.tableRef === "function") {
+        props.tableRef(tableRef.current);
+      } else {
+        props.tableRef.current = tableRef.current;
+      }
+    }
   }, []);
 
   const detailRef = useRef<any>();
