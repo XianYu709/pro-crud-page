@@ -99,7 +99,9 @@ export default function Page<T>(props: PageProps<T>) {
             <Button
               key={`${getDeepestText(item.body)}`}
               onClick={onClick}
-              className="mr-3"
+              style={{
+                marginRight: "12px",
+              }}
             >
               {item.body}
             </Button>
@@ -274,11 +276,7 @@ export default function Page<T>(props: PageProps<T>) {
         }}
         {...provide?.outBoxProps}
       >
-        {props?.subTitle && (
-          <div className={"ml-6 pt-2 text-[14px] text-gray-700 font-bold"}>
-            {props?.subTitle}
-          </div>
-        )}
+        {props?.subTitle && <div>{props?.subTitle}</div>}
         <ProTable<any>
           {...(provide?.globalTableProps as any)}
           actionRef={tableRef}
