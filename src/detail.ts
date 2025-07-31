@@ -2,7 +2,7 @@ import React from "react";
 import {
   type ProFormProps,
   type PageContainerProps,
-  type ProFormColumnsType,
+  ProFormColumnsType,
 } from "@ant-design/pro-components";
 import { type ModalProps } from "antd";
 
@@ -32,10 +32,11 @@ export type DefaultProps = {
   modeProps?: viewModeProps;
   formProps?: FormProps;
   schema?: ProFormColumnsType<any>;
+  data?: any;
   content?: (
-    e: ProFormColumnsType<any>,
-    options: {
-      handlerOK: (e: any) => Promise<void>;
+    data?: any,
+    options?: {
+      handlerOK?: (e: any) => Promise<void>;
       handlerDraft?: (e: any) => Promise<void>;
       handlerCancel?: (e?: any) => void;
     }
@@ -46,6 +47,7 @@ export type DefaultProps = {
 export type DefaultFormProps = Partial<
   Pick<
     DefaultProps,
+    | "data"
     | "schema"
     | "handlerOK"
     | "handlerDraft"

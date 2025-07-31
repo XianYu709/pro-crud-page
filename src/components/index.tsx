@@ -6,7 +6,7 @@ import {
 } from "@ant-design/pro-components";
 import { cloneDeep } from "lodash";
 import { Button, Popconfirm } from "antd";
-import { type apiButton, type PageProps } from "../index";
+import { custRender, type apiButton, type PageProps } from "../index";
 import Detail from "./detail";
 import React, { useRef, useState, useEffect, useMemo, useContext } from "react";
 import { PlusContext } from "../components/plus";
@@ -120,7 +120,11 @@ export default function Page<T>(props: PageProps<T>) {
 
     return apiButtonList.map((item: apiButton<any>, index: number) => {
       let element: React.ReactNode;
-      switch (item.mode) {
+      let mode: any = item.mode;
+      const extraModeKeys = Object.keys(provide?.ModeMap || {});
+      if (extraModeKeys.includes(mode)) mode = "extraMode";
+      if (typeof item.mode === "object") mode = "custMode";
+      switch (mode) {
         case "clickBtn":
           // element = getButton(item, () => item.api(removeDefault(rowColumns)));
           element = getButton(item, () =>
@@ -180,7 +184,7 @@ export default function Page<T>(props: PageProps<T>) {
             });
           });
           break;
-        case "detailMode":
+        case "extraMode":
           element = getButton(item, async () => {
             if (item?.preHandler) {
               const flag = await item?.preHandler?.();
@@ -188,19 +192,29 @@ export default function Page<T>(props: PageProps<T>) {
             }
             detailRef.current?.show({
               title: getDeepestText(item.body),
-              data: { rowData, rowColumns },
-              mode: "detailMode",
+              data: {
+                rowData,
+                rowColumns,
+                dataWithCol: mergeDataAndColumns(rowData, rowColumns),
+              },
+              mode: item.mode,
               modeProps: item.viewModeProps,
             });
           });
           break;
-        default:
+        case "custMode":
+          const modeObject = item.mode as custRender;
           element = getButton(item, () => {
             detailRef.current?.show({
               title: getDeepestText(item.body),
-              data: mergeDataAndColumns(rowData, rowColumns),
+              data: {
+                rowData,
+                rowColumns,
+                dataWithCol: mergeDataAndColumns(rowData, rowColumns),
+              },
               modeProps: item.viewModeProps,
-              custRender: item.mode,
+              mode: modeObject.base,
+              custRender: modeObject.render,
             });
           });
           break;
@@ -235,12 +249,13 @@ export default function Page<T>(props: PageProps<T>) {
       !rowProps.columns?.some((col) => col.valueType === "option")
     ) {
       const optionsCol: ProColumns = {
-        title: "操作",
         valueType: "option",
         dataIndex: (itemSettings.tableProps.rowKey || "id") as any,
         render: (_, row) => [
           ...renderApiButton(itemSettings?.actions ?? [], row),
         ],
+        ...(props?.tableProps?.optionsColSetting || {}),
+        title: "操作",
       };
       rowProps.columns.push(optionsCol);
     }
@@ -273,8 +288,8 @@ export default function Page<T>(props: PageProps<T>) {
           borderTop: "none",
           ...props?.pageProps?.style,
           display: showFather ? "block" : "none",
+          ...provide?.outBoxProps?.style,
         }}
-        {...provide?.outBoxProps}
       >
         {props?.subTitle && <div>{props?.subTitle}</div>}
         <ProTable<any>

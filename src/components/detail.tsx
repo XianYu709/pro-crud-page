@@ -63,7 +63,7 @@ const FormView: React.FC<DefaultFormProps> = ({
             );
           },
         }}
-        columns={schema as any[]}
+        columns={schema as ProFormColumnsType[]}
         {...(formProps as any)}
       />
     </>
@@ -73,7 +73,7 @@ const FormView: React.FC<DefaultFormProps> = ({
 const ModalMode: React.FC<DefaultProps> = ({
   modeProps,
   content,
-  schema,
+  data,
   handlerCancel,
   handlerDraft,
   handlerOK,
@@ -90,10 +90,10 @@ const ModalMode: React.FC<DefaultProps> = ({
     >
       <div className=" border-b border-solid border-gray-300 h-1 mb-6"></div>
       {content ? (
-        content(schema, { handlerOK, handlerCancel, handlerDraft })
+        content(data, { handlerOK, handlerCancel, handlerDraft })
       ) : (
         <FormView
-          schema={schema}
+          schema={data}
           handlerOK={handlerOK}
           handlerDraft={handlerDraft}
           handlerCancel={handlerCancel}
@@ -109,7 +109,7 @@ const PageMode: React.FC<DefaultProps> = ({
   content,
   handlerOK,
   handlerDraft,
-  schema,
+  data,
   formProps,
   title,
   handlerCancel,
@@ -123,10 +123,10 @@ const PageMode: React.FC<DefaultProps> = ({
       {...(modeProps as any)}
     >
       {content ? (
-        content(schema, { handlerOK, handlerCancel })
+        content(data, { handlerOK, handlerCancel })
       ) : (
         <FormView
-          schema={schema}
+          schema={data}
           handlerOK={handlerOK}
           handlerDraft={handlerDraft}
           handlerCancel={handlerCancel}
@@ -134,6 +134,32 @@ const PageMode: React.FC<DefaultProps> = ({
         />
       )}
     </PageContainer>
+  );
+};
+
+const FullMode: React.FC<DefaultProps> = ({
+  modeProps,
+  content,
+  handlerOK,
+  handlerDraft,
+  data,
+  formProps,
+  handlerCancel,
+}) => {
+  return (
+    <div {...(modeProps as any)}>
+      {content ? (
+        content(data, { handlerOK, handlerCancel })
+      ) : (
+        <FormView
+          schema={data as any}
+          handlerOK={handlerOK}
+          handlerDraft={handlerDraft}
+          handlerCancel={handlerCancel}
+          formProps={formProps}
+        />
+      )}
+    </div>
   );
 };
 
@@ -170,12 +196,18 @@ const Detail: React.FC<DetailProps> = forwardRef(
         onHideFather && onHideFather(false);
       } else {
         //全屏模式
-        if (params.mode === "page" || params.mode === "detailMode") {
+        if (
+          params.mode === "page" ||
+          params.mode === "detailMode" ||
+          //@ts-ignore
+          params.mode === "none"
+        ) {
           onHideFather && onHideFather(true);
         }
         setShowMode(params.mode);
         setBaseOptions({
-          schema: params.data,
+          //
+          data: params.data,
           title: params.title || "详情",
           // @ts-ignore
           [params.custRender ? "content" : ""]: function (e, options) {
@@ -217,11 +249,16 @@ const Detail: React.FC<DetailProps> = forwardRef(
     const ViewModeMap: Record<string, React.FunctionComponent> = {
       modal: ModalMode,
       page: PageMode,
+      none: FullMode,
       ...provide?.ModeMap,
     };
 
     const Comp: any = ViewModeMap[showMode];
-    return showMode && Comp ? <Comp {...modeProps} /> : <div>暂无匹配模式</div>;
+    return showMode && Comp ? (
+      <Comp {...modeProps} />
+    ) : (
+      <div>暂无匹配模式,请用PlusProvide添加</div>
+    );
   }
 );
 

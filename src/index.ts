@@ -1,19 +1,17 @@
 import Page from "./components/index";
 import {
+  ProColumnType,
   type PageContainerProps,
   type ProFormColumnsType,
   type ProTableProps,
 } from "@ant-design/pro-components";
-import {
-  type DefaultProps,
-  type viewModeProps,
-  type FormProps,
-} from "./detail";
+import { type DefaultProps, type viewModeProps } from "./detail";
+import { type FormProps } from "./detail";
 import React from "react";
 
-type custRender = {
+export type custRender = {
   render: Pick<DefaultProps, "content">;
-  base: "modal" | "page" | "none";
+  base: "modal" | "page";
 };
 
 export type apiButton<T> = {
@@ -28,6 +26,7 @@ export type apiButton<T> = {
     | "clickBtn"
     | "clickPrimry"
     | "detailMode"
+    | string
     | custRender;
   setRowData?: (row: any) => {};
   fromSchema?: ProFormColumnsType<T>[];
@@ -50,8 +49,10 @@ export interface PageProps<T> {
     style?: React.CSSProperties;
   };
   tableRef?: React.MutableRefObject<any> | Function;
-  formProps?: FormProps; //全局
-  tableProps?: ProTableProps<any, any>;
+  formProps?: FormProps;
+  tableProps?: ProTableProps<any, any> & {
+    optionsColSetting?: ProColumnType<any>;
+  };
   toolBar?: apiButton<T>[];
   actions?: apiButton<T>[];
   onHideFather?: (arg0: boolean) => void;
@@ -61,4 +62,4 @@ export interface PageProps<T> {
 export * from "./detail";
 
 export default Page;
-export { PlusProvider } from "./components/plus";
+export { PlusProvider, type PlusContextProps } from "./components/plus";
