@@ -32,7 +32,15 @@ const FormView: React.FC<DefaultFormProps> = ({
         submitter={{
           render: (api: any) => {
             return (
-              <div className="w-full flex justify-center gap-4 mt-2">
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "1rem",
+                  marginTop: "0.5rem",
+                }}
+              >
                 {formProps?._extra?.showCancel && (
                   <Button onClick={handlerCancel}>取消</Button>
                 )}
@@ -88,7 +96,13 @@ const ModalMode: React.FC<DefaultProps> = ({
       onCancel={handlerCancel}
       title={title}
     >
-      <div className=" border-b border-solid border-gray-300 h-1 mb-6"></div>
+      <div
+        style={{
+          borderBottom: "1px solid #D1D5DB",
+          height: "0.25rem",
+          marginBottom: "1.5rem",
+        }}
+      ></div>
       {content ? (
         content(data, { handlerOK, handlerCancel, handlerDraft })
       ) : (
@@ -116,7 +130,7 @@ const PageMode: React.FC<DefaultProps> = ({
 }) => {
   return (
     <PageContainer
-      className="bg-bg w-full h-full z-20 "
+      style={{ height: "100%", width: "100%", zIndex: 20 }}
       header={{
         title,
       }}

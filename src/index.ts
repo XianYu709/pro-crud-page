@@ -11,7 +11,7 @@ import React from "react";
 
 export type custRender = {
   render: Pick<DefaultProps, "content">;
-  base: "modal" | "page";
+  base: "modal" | "page" | "none";
 };
 
 export type apiButton<T> = {
