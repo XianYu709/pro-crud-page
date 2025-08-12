@@ -47,8 +47,8 @@ export default function Page<T>(props: PageProps<T>) {
   const mergeDataAndColumns = (row: any, columns: ProColumns<T>[]) => {
     if (!row) return columns;
     const newObj = JSON.parse(JSON.stringify(columns));
-    newObj.forEach((col: any, index: number) => {
-      col.key = `${col.dataIndex}-${index}`;
+    newObj.forEach((col: any) => {
+      col.key = `${col.dataIndex}`;
       if (Object.keys(row).includes(col.dataIndex)) {
         if (col.valueType === "select") {
           col.initialValue = row[col.dataIndex];
